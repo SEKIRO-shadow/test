@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/pagination.css"/>
+    <script src="scripts/pagination.js"></script>
+    <script src="scripts/jquery.min.js"></script>
+    <title>Title</title>
+    <script type="text/javascript">
+        $(function () {
+            var pageIndex = '[[${pageInfo.pageNum}]]';
+            var total = '[[${pageInfo.total}]]';
+            var pageSize = '[[${pageInfo.pageSize}]]';
+            var pages = '[[${pageInfo.pages}]]';
+            new Pagination({
+                element: '#pages',
+                type: 1,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                total: total,
+                jumper: true,
+                singlePageHide: false,
+                prevText: '上一页',
+                nextText: '下一页',
+                disabled: true,
+                currentChange: function(index) {
+                    $("#pageNum").val(index);
+                    $("#userForm").submit();
+                }
+            });
+        })
+        function resetForm() {
+            $("#userinfoLoginid").val('');
+            $("input[name=userinfoSex]:checked").attr('checked',false);
+            $("#userinfoEmail").val('');
+            $("#userinfoMobile").val('');
+
+        }
+
+
+
+    </script>
+</head>
+<body>
+<br/>
+<form method="post" action="/selectAll" id="userForm">
+    <input type="hidden" id="pageNum" name="pageNum"/>
+    登录名：<input type="text" id="userinfoLoginid" name="userinfoLoginid" th:value="${systemUserinfo.userinfoLoginid}"/><br/>
+    性别：
+    <div th:switch="${systemUserinfo.userinfoSex}" style="display: inline-block">
+         <span th:case="男">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" checked/>男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女"/>女<br/>
+         </span>
+        <span th:case="女">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" />男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女" checked/> 女<br/>
+         </span>
+        <span th:case="*">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" />男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女"/> 女<br/>
+         </span>
+    </div>
+    <br/>
+
+    邮箱：<input type="text" id="userinfoEmail" name="userinfoEmail" th:value="${systemUserinfo.userinfoEmail}"/><br/>
+    电话：<input type="text" id="userinfoMobile" name="userinfoMobile" th:value="${systemUserinfo.userinfoMobile}"/><br/>
+    <input type="submit" value="查询"/>     <input type="button" value="清空" onclick="resetForm()"/>
+</form>
+<br/>
+<table border="1" align="center">
+    <tr>
+        <td colspan="8" align="right">
+            <input type="button" value="添加" onclick="location.href='toAddUser'"/>
+        </td>
+    </tr>
+    <tr>
+        <td>编号</td>
+        <td>登录名</td>
+        <td>姓名</td>
+        <td>角色</td>
+        <td>性别</td>
+        <td>邮箱</td>
+        <td>电话</td>
+        <td>操作</td>
+    </tr>
+    <!--/*@thymesVar id="list" type=""*/-->
+    <tr th:each="user:${pageInfo.list}">
+        <td th:text="${user.userinfoUid}"></td>
+        <td th:text="${user.userinfoLoginid}"></td>
+        <td th:text="${user.userinfoName}"></td>
+        <td th:text="${user.systemRole.roleName}"></td>
+        <td th:text="${user.userinfoSex}"></td>
+        <td th:text="${user.userinfoEmail}"></td>
+        <td th:text="${user.userinfoMobile}"></td>
+        <td><a th:href="@{/toUpdateUser(uid=${user.userinfoUid})}" >修改</a>&nbsp;<a th:href="@{/delUser(uid=${user.userinfoUid})}">删除</a></td>
+    </tr>
+    <!--
+        <tr>
+            <td colspan="6" align="right">
+                当前页：<span th:text="${pageInfo.pageNum}"/>
+                总条数：<span th:text="${pageInfo.total}"/>
+                总页数：<span th:text="${pageInfo.pages}"/><br/>
+
+                &lt;!&ndash;如果当前页为第一页，只显示下一页和末页&ndash;&gt;
+                <span th:if="${pageInfo.pageNum}==1">
+                      <a th:href="@{/selectAll(pageNum=${pageInfo.nextPage})}">下一页</a>&nbsp;
+                      <a th:href="@{/selectAll(pageNum=${pageInfo.navigateLastPage})}">末页</a>&nbsp;
+                </span>
+                <span th:if="${pageInfo.pageNum}==${pageInfo.pages}">
+                    <a th:href="@{/selectAll(pageNum=1)}">首页</a>&nbsp;
+                    <a th:href="@{/selectAll(pageNum=${pageInfo.prePage})}">上一页</a>&nbsp;
+                </span>
+                <span th:if="${pageInfo.pageNum}!=1 and ${pageInfo.pageNum}!=${pageInfo.pages} ">
+                    <a th:href="@{/selectAll(pageNum=1)}">首页</a>&nbsp;
+                    <a th:href="@{/selectAll(pageNum=${pageInfo.prePage})}">上一页</a>&nbsp;
+                    <a th:href="@{/selectAll(pageNum=${pageInfo.nextPage})}">下一页</a>&nbsp;
+                    <a th:href="@{/selectAll(pageNum=${pageInfo.navigateLastPage})}">末页</a>&nbsp;
+                </span>
+            </td>
+        </tr>
+    -->
+</table>
+<div id="pages">
+</div>
+</body>
+</html>

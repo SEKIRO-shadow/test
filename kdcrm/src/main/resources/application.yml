@@ -1,0 +1,37 @@
+server:
+  port: 8081
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    cache: false
+    mode: LEGACYHTML5
+  datasource:
+    url: jdbc:oracle:thin:localhost:1521:orcl
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: ebuy
+    password: root
+    tomcat:
+      max-active: 20
+      max-wait: 60000
+      min-idle: 2
+      initial-size: 1
+  redis:
+#    cluster:
+#      nodes: 127.0.0.1:6379,127.0.0.1:6380,127.0.0.1:6381,127.0.0.1:6382,127.0.0.1:6383,127.0.0.1:6384
+#    password: 123456
+    lettuce:
+      pool:
+        max-active: 10
+        min-idle: 5
+        max-wait: 60000
+    password: 50049714
+    host: 127.0.0.1
+    port: 6379
+mybatis:
+  type-aliases-package: cn.kdcrm.pojo
+  mapper-locations: cn/kdcrm/mapper/*.xml
+logging:
+  level:
+    cn.kdcrm: DEBUG

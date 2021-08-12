@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="scripts/jquery.min.js"></script>
+    <title>Title</title>
+
+</head>
+<body>
+<div th:text="${msg}"></div>
+<form method="post" action="/doUpdateUser" id="userForm">
+    <input type="hidden" id="userinfoUid" name="userinfoUid" th:value="${systemUserinfo.userinfoUid}"/>
+    登录名：<input type="text" id="userinfoLoginid" name="userinfoLoginid" th:value="${systemUserinfo.userinfoLoginid}"/>
+    <span th:text="${userinfoLoginid}"/>
+    <br/>
+    姓名：<input type="text" id="userinfoName" name="userinfoName" th:value="${systemUserinfo.userinfoName}"/>
+    <span th:text="${userinfoName}"/>
+    <br/>
+    密码：<input type="password" id="userinfoPassword" name="userinfoPassword"  th:value="${systemUserinfo.userinfoPassword}"  />
+    <span th:text="${userinfoPassword}"/>
+    <br/>
+    性别：
+    <div th:switch="${systemUserinfo.userinfoSex}" style="display: inline-block">
+         <span th:case="男">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" checked/>男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女"/>女<br/>
+         </span>
+        <span th:case="女">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" />男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女" checked/> 女<br/>
+         </span>
+        <span th:case="*">
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="男" />男
+              <input type="radio" id="userinfoSex" name="userinfoSex" value="女"/> 女<br/>
+         </span>
+        <span th:text="${userinfoSex}"/>
+    </div>
+    <br/>
+    邮箱：<input type="text" id="userinfoEmail" name="userinfoEmail" th:value="${systemUserinfo.userinfoEmail}"/>
+    <span th:text="${userinfoEmail}"/>
+    <br/>
+    电话：<input type="text" id="userinfoMobile" name="userinfoMobile" th:value="${systemUserinfo.userinfoMobile}"/>
+    <span th:text="${userinfoMobile}"/>
+    <br/>
+    角色：<select name="roleId" >
+    <option value="">--请选择--</option>
+    <option  th:selected="${systemUserinfo.roleId}==${role.roleId}"  th:each="role:${listRole}" th:value="${role.roleId}" th:text="${role.roleName}"></option>
+</select>
+    <span th:text="${roleId}"/>
+    <br/>
+
+    <input type="submit" value="更新"/>
+</form>
+<br/>
+
+</body>
+</html>
